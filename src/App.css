@@ -425,21 +425,26 @@ h1 {
   min-height: 620px;
   display: grid;
   place-items: center;
+  max-width: 100%;
+  overflow: clip;
   perspective: 1200px;
 }
 
 .orbiting-skills {
   position: relative;
   display: grid;
+  --orbit-scale: 1;
   width: min(100%, 520px);
   min-height: 520px;
   place-items: center;
-  overflow: visible;
+  overflow: clip;
+  contain: layout paint;
 }
 
 .orbit-background {
   position: absolute;
   inset: 4%;
+  z-index: 0;
   border-radius: 50%;
   opacity: 0.72;
   background:
@@ -451,6 +456,7 @@ h1 {
 
 .orbit-stage {
   position: relative;
+  z-index: 1;
   display: flex;
   width: 450px;
   height: 450px;
@@ -1373,9 +1379,8 @@ h1 {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: scale(0.86);
+    transform: translate(-50%, -50%) scale(0.86);
     transform-origin: center;
-    translate: -50% -50%;
   }
 
   .stats-strip,
@@ -1455,9 +1460,8 @@ h1 {
   }
 
   .orbit-stage {
-    transform: scale(clamp(0.68, calc((100vw - 32px) / 450), 0.78));
+    transform: translate(-50%, -50%) scale(clamp(0.68, calc((100vw - 32px) / 450), 0.78));
     transform-origin: center;
-    translate: -50% -50%;
   }
 
   .floating-panel {
@@ -1578,9 +1582,8 @@ h1 {
   }
 
   .orbit-stage {
-    transform: scale(clamp(0.7, calc((100vw - 32px) / 450), 0.76));
+    transform: translate(-50%, -50%) scale(clamp(0.7, calc((100vw - 32px) / 450), 0.76));
     transform-origin: center;
-    translate: -50% -50%;
   }
 }
 
