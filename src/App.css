@@ -5,8 +5,7 @@
 .portfolio-shell {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
-  overflow-x: clip;
+  overflow: visible;
   color: #f5f8ff;
   background:
     radial-gradient(circle at 18% 10%, rgba(24, 102, 255, 0.28), transparent 28rem),

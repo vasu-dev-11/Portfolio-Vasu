@@ -26,13 +26,10 @@ body {
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
 }
 
 body.menu-open {
-  overflow: hidden;
+  overflow-y: hidden;
 }
 
 a {

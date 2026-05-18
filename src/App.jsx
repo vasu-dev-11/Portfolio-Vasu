@@ -193,7 +193,8 @@ function App() {
     event?.preventDefault()
     setActiveSection(sectionId)
     setIsMenuOpen(false)
-    scrollToSection(sectionId)
+    document.body.classList.remove('menu-open')
+    window.requestAnimationFrame(() => scrollToSection(sectionId))
   }
 
   return (
