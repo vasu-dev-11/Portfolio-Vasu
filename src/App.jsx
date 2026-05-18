@@ -176,9 +176,24 @@ function App() {
     event.preventDefault()
   }
 
-  const handleNavClick = (sectionId) => {
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId)
+    if (!section) return
+
+    const headerOffset = window.innerWidth <= 980 ? 106 : 96
+    const top = section.getBoundingClientRect().top + window.scrollY - headerOffset
+
+    window.scrollTo({
+      top: Math.max(top, 0),
+      behavior: 'smooth',
+    })
+  }
+
+  const handleNavClick = (sectionId, event) => {
+    event?.preventDefault()
     setActiveSection(sectionId)
     setIsMenuOpen(false)
+    scrollToSection(sectionId)
   }
 
   return (
@@ -187,7 +202,7 @@ function App() {
       <div className="noise-layer" aria-hidden="true"></div>
 
       <nav className="top-nav" aria-label="Primary navigation">
-        <a className="brand" href="#top" aria-label="Vasu Savjani home">
+        <a className="brand" href="#top" aria-label="Vasu Savjani home" onClick={(event) => handleNavClick('top', event)}>
           <span>VS</span>
           Vasu Savjani
         </a>
@@ -201,7 +216,7 @@ function App() {
                 className={isActive ? 'active' : ''}
                 href={`#${item.id}`}
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={(event) => handleNavClick(item.id, event)}
               >
                 {item.label}
               </a>
@@ -242,7 +257,7 @@ function App() {
                 className={isActive ? 'active' : ''}
                 href={`#${item.id}`}
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={(event) => handleNavClick(item.id, event)}
               >
                 {item.label}
               </a>
@@ -260,8 +275,8 @@ function App() {
             real-estate platforms, and responsive React applications.
           </p>
           <div className="hero-actions">
-            <a className="button primary" href="#projects">View Projects</a>
-            <a className="button secondary" href="#contact">Let&apos;s Work Together</a>
+            <a className="button primary" href="#projects" onClick={(event) => handleNavClick('projects', event)}>View Projects</a>
+            <a className="button secondary" href="#contact" onClick={(event) => handleNavClick('contact', event)}>Let&apos;s Work Together</a>
           </div>
         </div>
 
@@ -396,7 +411,7 @@ function App() {
 
       <footer className="site-footer">
         <p>Copyright © 2026 Vasu Savjani. All rights reserved.</p>
-        <a href="#top" onClick={() => setActiveSection('top')}>Back to top</a>
+        <a href="#top" onClick={(event) => handleNavClick('top', event)}>Back to top</a>
       </footer>
     </main>
   )
