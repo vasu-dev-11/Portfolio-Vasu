@@ -58,11 +58,13 @@ const timeline = [
   {
     company: 'Santushti Infotech',
     role: 'Web Developer',
+    duration: 'Oct 2024 — Present',
     text: 'Developing and delivering responsive client websites across e-commerce, real-estate, business, and portfolio domains using WordPress, WooCommerce, Elementor, PHP, HTML, CSS, and JavaScript. Worked on custom layouts, payment gateway integration, product filtering, lead generation forms, and responsive frontend experiences for modern business websites.',
   },
   {
     company: 'Krishaweb Technologies',
     role: 'Web Development Intern',
+    duration: 'Jan 2024 — May 2024',
     text: 'Worked on WordPress theme customization and frontend development for client projects, focusing on responsive layouts, Elementor-based website building, ACF integration, and UI implementation using HTML, CSS, and JavaScript. Gained hands-on experience with WordPress workflows, dynamic content management, and scalable website structure development.',
   },
 ]
@@ -351,6 +353,7 @@ function App() {
               <div>
                 <p>{item.role}</p>
                 <h3>{item.company}</h3>
+                <p className="timeline-duration">{item.duration}</p>
                 <span>{item.text}</span>
               </div>
             </article>

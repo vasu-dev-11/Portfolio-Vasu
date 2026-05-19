@@ -1065,6 +1065,12 @@ h1 {
   font-weight: 800;
 }
 
+.timeline-duration {
+  color: #c7d3ea;
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .marquee-section {
   overflow: hidden;
   border-block: 1px solid rgba(169, 198, 255, 0.13);
