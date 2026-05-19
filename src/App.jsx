@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLenis } from 'lenis/react'
 import './App.css'
 import OrbitingSkills from '../components/ui/orbiting-skills'
 
@@ -110,13 +111,14 @@ function ProjectPreview({ accent }) {
 }
 
 function App() {
+  const lenis = useLenis()
   const [activeSection, setActiveSection] = useState('top')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
-    let ticking = false
+    let rafId = 0
 
-    const updateActiveSection = () => {
+    const computeActive = (scrollY) => {
       const sectionPositions = navItems
         .map((item) => {
           const element = document.getElementById(item.id)
@@ -124,47 +126,67 @@ function App() {
         })
         .filter(Boolean)
 
-      if (!sectionPositions.length) {
-        ticking = false
-        return
-      }
+      if (!sectionPositions.length) return
 
-      const pageBottom =
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 12
+      const viewH = window.innerHeight
+      const docHeight = document.documentElement.scrollHeight
+      const pageBottom = scrollY + viewH >= docHeight - 12
 
       if (pageBottom) {
-        setActiveSection('contact')
-        ticking = false
+        setActiveSection((prev) => (prev === 'contact' ? prev : 'contact'))
         return
       }
 
-      const activationPoint = window.scrollY + Math.min(window.innerHeight * 0.42, 360)
+      const activationPoint = scrollY + Math.min(viewH * 0.42, 360)
       const currentSection = sectionPositions.reduce((current, section) => {
         return activationPoint >= section.top ? section.id : current
       }, sectionPositions[0].id)
 
-      setActiveSection(currentSection)
-      ticking = false
+      setActiveSection((prev) => (prev === currentSection ? prev : currentSection))
     }
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateActiveSection)
-        ticking = true
+    const scheduleUpdate = () => {
+      if (rafId) return
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0
+        if (lenis) {
+          computeActive(lenis.scroll)
+        } else {
+          computeActive(window.scrollY)
+        }
+      })
+    }
+
+    const onResize = () => scheduleUpdate()
+
+    if (lenis) {
+      const onLenisScroll = () => scheduleUpdate()
+      lenis.on('scroll', onLenisScroll)
+      scheduleUpdate()
+      window.addEventListener('resize', onResize)
+      window.addEventListener('hashchange', scheduleUpdate)
+
+      return () => {
+        lenis.off('scroll', onLenisScroll)
+        window.removeEventListener('resize', onResize)
+        window.removeEventListener('hashchange', scheduleUpdate)
+        if (rafId) cancelAnimationFrame(rafId)
       }
     }
 
-    updateActiveSection()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', updateActiveSection)
-    window.addEventListener('hashchange', updateActiveSection)
+    const onScroll = () => scheduleUpdate()
+    scheduleUpdate()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize)
+    window.addEventListener('hashchange', scheduleUpdate)
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', updateActiveSection)
-      window.removeEventListener('hashchange', updateActiveSection)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('hashchange', scheduleUpdate)
+      if (rafId) cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [lenis])
 
   useEffect(() => {
     document.body.classList.toggle('menu-open', isMenuOpen)
@@ -173,6 +195,12 @@ function App() {
       document.body.classList.remove('menu-open')
     }
   }, [isMenuOpen])
+
+  useEffect(() => {
+    if (!lenis) return
+    if (isMenuOpen) lenis.stop()
+    else lenis.start()
+  }, [lenis, isMenuOpen])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -183,11 +211,20 @@ function App() {
     if (!section) return
 
     const headerOffset = window.innerWidth <= 980 ? 106 : 96
-    const top = section.getBoundingClientRect().top + window.scrollY - headerOffset
 
+    if (lenis) {
+      lenis.scrollTo(section, {
+        offset: -headerOffset,
+        duration: 1.05,
+        easing: (t) => 1 - (1 - t) ** 3,
+      })
+      return
+    }
+
+    const top = section.getBoundingClientRect().top + window.scrollY - headerOffset
     window.scrollTo({
       top: Math.max(top, 0),
-      behavior: 'smooth',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
     })
   }
 
@@ -270,7 +307,7 @@ function App() {
       </aside>
 
       <section className="hero-section section-pad" id="top">
-        <div className="hero-copy">
+        <div className="hero-copy hero-reveal">
           <p className="eyebrow">Frontend & WordPress Developer</p>
           <h1>Modern UI Focused Web Development.</h1>
           <p className="hero-subtitle">

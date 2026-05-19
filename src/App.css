@@ -14,16 +14,10 @@
     linear-gradient(180deg, #05060a 0%, #090b13 46%, #05060a 100%);
 }
 
-.ambient-grid,
-.noise-layer {
+.ambient-grid {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  transform: translateZ(0);
-  will-change: transform;
-}
-
-.ambient-grid {
   z-index: 0;
   opacity: 0.42;
   background-image:
@@ -31,15 +25,21 @@
     linear-gradient(90deg, rgba(115, 150, 255, 0.11) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
+  transform: translate3d(0, var(--scroll-parallax, 0px), 0);
+  will-change: transform;
 }
 
 .noise-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
   z-index: 1;
   opacity: 0.16;
   background-image:
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
   mix-blend-mode: soft-light;
+  transform: translateZ(0);
 }
 
 .portfolio-shell > *:not(.ambient-grid):not(.noise-layer):not(.top-nav):not(.mobile-menu-backdrop):not(.mobile-sidebar) {
