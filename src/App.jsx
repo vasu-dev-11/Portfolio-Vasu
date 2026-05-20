@@ -71,7 +71,7 @@ const timeline = [
 ]
 
 const marqueeItems = ['WordPress', 'React', 'WooCommerce', 'Elementor', 'PHP', 'JavaScript', 'GitHub', 'ACF']
-const githubProfileUrl = 'https://github.com/vasu-savjani'
+const githubProfileUrl = 'https://github.com/Vasu-Savjani/live-projects'
 
 const navItems = [
   { id: 'top', label: 'Home' },
@@ -429,7 +429,7 @@ function App() {
           <h2>Need a WordPress or React Developer?</h2>
           <div className="contact-links">
             <a href="mailto:vbsavjani007@gmail.com">Email: vbsavjani007@gmail.com</a>
-            <a href="https://github.com/vasu-savjani" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://github.com/Vasu-Savjani/live-projects" target="_blank" rel="noreferrer">GitHub</a>
             <span>Location: Rajkot, Gujarat, India</span>
           </div>
         </div>
